@@ -189,5 +189,36 @@ std::string ProcessParser::PrintCpuStats(std::vector<std::string> values1, std::
 }
 
 float ProcessParser::getSysRamPercent(){
-    
+    float sysRamPercent = 0.0f;
+    string line = "";
+    stream = Util::getStream(Path::basePath() + Path::memInfoPath());
+    string name1 = "MemAvailable:";
+    string name2 = "MemFree:";
+    string name3 = "Buffers:";
+
+    float totalMem = 0.0f;
+    float freeMem = 0.0f;
+    float buffers = 0.0f;
+
+    while(getline(stream, line)){
+        if(line.find(name1) != std::string::npos){
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string>values(beg, end);
+            totalMem = stof(values[1]);
+        }
+        if(line.find(name2) != std::string::npos){
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string>values(beg, end);
+            freeMem = stof(values[1]);
+        }
+        if(line.find(name3) != std::string::npos){
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string>values(beg, end);
+            buffers = stof(values[1]);
+        }
+    }
+    return (100*(1-(freeMem/(totalMem-buffers))));
 }
