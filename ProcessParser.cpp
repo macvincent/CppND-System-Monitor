@@ -222,3 +222,81 @@ float ProcessParser::getSysRamPercent(){
     }
     return (100*(1-(freeMem/(totalMem-buffers))));
 }
+
+string ProcessParser::getSysKernelVersion(){
+    string line = "";
+    string name = "Linux";
+    stream = Util::getStream(Path::basePath() + Path::versionPath());
+    while(getline(stream, line)){
+        if(line.find(name) != string::npos){
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string>values(beg, end);
+            return values[2];
+        }
+    }
+    return name;
+}
+
+string ProcessParser::getOSName(){
+    stream = Util::getStream("/etc/os-release");
+    string OSName = "";
+    string name = "PRETTY_NAME=";
+    string line = "";
+    while(getline(stream, line)){
+        if(line.find(name) != string::npos){
+            OSName = line.substr(name.size());
+            return OSName.substr(0, OSName.size()-1);
+        }
+    }
+    return OSName;
+}
+int ProcessParser::getTotalThreads(){
+    string name = "Threads";
+    string line= "";
+    int totalThreads = 0;
+    for(auto pid : ProcessParser::getPidList()){
+        stream = Util::getStream(Path::basePath() + pid + Path::statusPath());
+        while(getline(stream, line)){
+            if(line.find(name) != string::npos){
+                istringstream buf(line);
+                istream_iterator<string> beg(buf), end;
+                vector<string> values(beg, end);
+                totalThreads += stoi(values[1]);
+            }
+        }
+    }
+    return totalThreads;
+}
+
+int ProcessParser::getTotalNumberOfProcesses(){
+    string name = "processes";
+    string line= "";
+    int totalProcesses = 0;
+    stream = Util::getStream(Path::basePath() + Path::statPath());
+    while(getline(stream, line)){
+        if(line.find(name) != string::npos){
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string> values(beg, end);
+            totalProcesses = stoi(values[1]);
+        }
+    }
+    return totalProcesses;
+}
+
+int ProcessParser::getNumberOfRunningProcesses(){
+    string name = "procs running";
+    string line= "";
+    int totalProcesses = 0;
+    stream = Util::getStream(Path::basePath() + Path::statPath());
+    while(getline(stream, line)){
+        if(line.find(name) != string::npos){
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string> values(beg, end);
+            totalProcesses = stoi(values[2]);
+        }
+    }
+    return totalProcesses;
+}
