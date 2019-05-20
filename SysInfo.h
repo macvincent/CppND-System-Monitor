@@ -24,8 +24,8 @@ public:
     Getting initial info about system
     Initial data for individual cores is set
     System data is set
-    */
-        this->getOtherCores(getNumberOfCores());
+    */      
+        this->getOtherCores(ProcessParser::getNumberOfCpuCores());
         this->setLastCpuMeasures();
         this->setAttributes();
         this-> OSname = ProcessParser::getOSName();
@@ -54,7 +54,8 @@ void SysInfo::getOtherCores(int _size){
         this->currentCpuCoresStats = std::vector<std::vector<std::string>>();
         this->currentCpuCoresStats.resize(_size);
     for(int i=0;i<_size;i++){
-        this->lastCpuCoresStats[i] = ProcessParser::getSysCpuPercent(to_string(i));
+        string temp = to_string(i);
+        this->lastCpuCoresStats[i] = ProcessParser::getSysCpuPercent(temp);
     }
 }
 void SysInfo::setLastCpuMeasures(){
