@@ -135,9 +135,9 @@ string ProcessParser::getProcUser(string pid){
     }
 
     name = "x:" + result;
-    stream = Util::getStream("/etc/passwd-");
+    ifstream tream = Util::getStream("/etc/passwd-");
     
-    while(getline(stream, line)){
+    while(getline(tream, line)){
         if(line.find(name) != std::string::npos){
             return result;
             break;
@@ -241,11 +241,12 @@ float ProcessParser::getSysRamPercent(){
     string name2 = "MemFree:";
     string name3 = "Buffers:";
 
-    float totalMem = 0.0f;
-    float freeMem = 0.0f;
-    float buffers = 0.0f;
+    float totalMem = 0;
+    float freeMem = 0;
+    float buffers = 0;
 
     while(getline(stream, line)){
+        if(totalMem != 0 && freeMem != 0)break;
         if(line.find(name1) != std::string::npos){
             istringstream buf(line);
             istream_iterator<string> beg(buf), end;
@@ -332,7 +333,7 @@ int ProcessParser::getTotalNumberOfProcesses(){
 }
 
 int ProcessParser::getNumberOfRunningProcesses(){
-    string name = "procs running";
+    string name = "procs_running";
     string line= "";
     int totalProcesses = 0;
     ifstream stream = Util::getStream(Path::basePath() + Path::statPath());
@@ -341,7 +342,7 @@ int ProcessParser::getNumberOfRunningProcesses(){
             istringstream buf(line);
             istream_iterator<string> beg(buf), end;
             vector<string> values(beg, end);
-            totalProcesses = stoi(values[2]);
+            totalProcesses = stoi(values[1]);
         }
     }
     return totalProcesses;
