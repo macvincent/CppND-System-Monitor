@@ -222,3 +222,8 @@ float ProcessParser::getSysRamPercent(){
     }
     return (100*(1-(freeMem/(totalMem-buffers))));
 }
+float ProcessParser::getSysRamPercent(){
+    string line = "";
+    stream = Util::getStream(Path::basePath() + Path::versionPath());
+
+}
