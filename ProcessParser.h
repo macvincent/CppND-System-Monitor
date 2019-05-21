@@ -75,7 +75,7 @@ string ProcessParser::getVmSize(string pid){
 string ProcessParser::getCpuPercent(string pid){
     string line;
     float result;
-    ifstream stream = Util::getStream(Path::basePath() + pid + Path::statusPath());
+    ifstream stream = Util::getStream(Path::basePath() + pid + Path::statPath());
     getline(stream, line);
     istringstream buf (line);
     istream_iterator<string> beg(buf), end;
@@ -96,7 +96,7 @@ string ProcessParser::getCpuPercent(string pid){
 std::string ProcessParser::getProcUpTime(string pid){
     string value;
     string line;
-    ifstream stream = Util::getStream(Path::basePath() + pid + Path::statusPath());
+    ifstream stream = Util::getStream(Path::basePath() + pid + Path::statPath());
     getline(stream, line);
     istringstream buf (line);
     istream_iterator<string> beg(buf), end;
@@ -145,11 +145,10 @@ string ProcessParser::getProcUser(string pid){
     }
 }
 bool allDigit(string str){
-    for(auto i : str){
-        if(!(isdigit(i))){
-            return false;
-        }
+    for(int i = 0; i < str.size(); i++){
+        if(!isdigit(str[i]))return false;
     }
+    return true;
 }
 
 vector<string> ProcessParser::getPidList(){
@@ -158,7 +157,6 @@ vector<string> ProcessParser::getPidList(){
     if(!(dir = opendir("/proc"))){
         throw runtime_error(strerror(errno));
     }
-
     while(dirent* dirp = readdir(dir)){
         if(dirp->d_type != DT_DIR){
             continue;
@@ -302,7 +300,6 @@ int ProcessParser::getTotalThreads(){
     string line= "";
     int totalThreads = 0;
     for(auto pid : ProcessParser::getPidList()){
-            cout << "got here" <<  endl;
         ifstream stream = Util::getStream(Path::basePath() + pid + Path::statusPath());
         while(getline(stream, line)){
             if(line.find(name) != string::npos){
