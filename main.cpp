@@ -24,7 +24,7 @@ void writeSysInfoToConsole(SysInfo sys, WINDOW* sys_win){
 
     mvwprintw(sys_win,2,2,getCString(( "OS: " + sys.getOSName())));
     mvwprintw(sys_win,3,2,getCString(( "Kernel version: " + sys.getKernelVersion())));
-    mvwprintw(sys_win,4,2,getCString( "CPU: "));
+    mvwprintw(sys_win,4,2,getCString( "CPU:   "));
     wattron(sys_win,COLOR_PAIR(1));
     wprintw(sys_win,getCString(Util::getProgressBar(sys.getCpuPercent())));
     wattroff(sys_win,COLOR_PAIR(1));
@@ -35,7 +35,7 @@ void writeSysInfoToConsole(SysInfo sys, WINDOW* sys_win){
      mvwprintw(sys_win,(6+i),2,getCString(val[i]));
     }
     wattroff(sys_win,COLOR_PAIR(1));
-    mvwprintw(sys_win,10,2,getCString(( "Memory: ")));
+    mvwprintw(sys_win,10,2,getCString(( "Memory:")));
     wattron(sys_win,COLOR_PAIR(1));
     wprintw(sys_win,getCString(Util::getProgressBar(sys.getMemPercent())));
     wattroff(sys_win,COLOR_PAIR(1));

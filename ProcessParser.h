@@ -227,7 +227,7 @@ std::string ProcessParser::PrintCpuStats(std::vector<std::string> values1, std::
     float active_time = get_sys_active_cpu_time(values2)-get_sys_active_cpu_time(values1);
     float idle_time = get_sys_idle_cpu_time(values2) - get_sys_idle_cpu_time(values1);
     float total_time = active_time + idle_time;
-    float result = 100.0*(active_time / total_time);
+    float result = 1000.0*(active_time / total_time);
     return to_string(result);
 }
 
@@ -290,7 +290,7 @@ string ProcessParser::getOSName(){
     while(getline(stream, line)){
         if(line.find(name) != string::npos){
             OSName = line.substr(name.size());
-            return OSName.substr(0, OSName.size()-1);
+            return OSName;
         }
     }
     return OSName;

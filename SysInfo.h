@@ -89,7 +89,7 @@ void SysInfo::setAttributes(){
 std::vector<std::string> SysInfo::getCoresStats()const{
     std::vector<std::string> result= std::vector<std::string>();
     for(int i=0; i < this->coresStats.size(); i++){
-        std::string temp =("cpu" + to_string(i) +": ");
+        std::string temp =("cpu" + to_string(i) +":  ");
         float check = stof(this->coresStats[i]);
 
         if(!check || this->coresStats[i] == "nan"){
