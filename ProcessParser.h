@@ -7,6 +7,7 @@
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
+#include <set>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -23,6 +24,7 @@ using namespace std;
 class ProcessParser{
 private:
     static std::ifstream stream;
+    static set<string>pidList;
     public:
     static string getCmd(string pid);
     static vector<string> getPidList();
@@ -169,6 +171,7 @@ vector<string> ProcessParser::getPidList(){
     if(closedir(dir)){
         throw runtime_error(strerror(errno));
     }
+    pidList(container.begin(), container.end());
     return container;
 }
 
@@ -202,7 +205,7 @@ vector<string> ProcessParser::getSysCpuPercent(string coreNumber){
     return (vector<string>());
 }
 
-float get_sys_active_cpu_time(vector<string> values)
+float getSysActiveCpuTime(vector<string> values)
 {
     return (stof(values[S_USER]) +
             stof(values[S_NICE]) +
@@ -214,7 +217,7 @@ float get_sys_active_cpu_time(vector<string> values)
             stof(values[S_GUEST_NICE]));
 }
 
-float get_sys_idle_cpu_time(vector<string>values)
+float getSysIdleCpuTime(vector<string>values)
 {
     return (stof(values[S_IDLE]) + stof(values[S_IOWAIT]));
 }
@@ -224,10 +227,10 @@ std::string ProcessParser::PrintCpuStats(std::vector<std::string> values1, std::
      * CPU stats are time-dependent
      * So the only way to get valid CPU statistics are by specifying a time interval
      */
-    float active_time = get_sys_active_cpu_time(values2)-get_sys_active_cpu_time(values1);
-    float idle_time = get_sys_idle_cpu_time(values2) - get_sys_idle_cpu_time(values1);
-    float total_time = active_time + idle_time;
-    float result = 1000.0*(active_time / total_time);
+    float activeTime = Svalues2)-Svalues1);
+    float idleTime = getSysIdleCpuTime(values2) - getSysIdleCpuTime(values1);
+    float totalTime = activeTime + idleTime;
+    float result = 1000.0*(activeTime / totalTime);
     return to_string(result);
 }
 
@@ -343,4 +346,8 @@ int ProcessParser::getNumberOfRunningProcesses(){
         }
     }
     return totalProcesses;
+}
+
+bool ProcessParser::isPidExisting(string pid){
+    return pidList.count(pid) != 0;
 }
