@@ -227,7 +227,7 @@ std::string ProcessParser::PrintCpuStats(std::vector<std::string> values1, std::
      * CPU stats are time-dependent
      * So the only way to get valid CPU statistics are by specifying a time interval
      */
-    float activeTime = Svalues2)-Svalues1);
+    float activeTime = getSysActiveCpuTime(values2) - getSysActiveCpuTime(values1);
     float idleTime = getSysIdleCpuTime(values2) - getSysIdleCpuTime(values1);
     float totalTime = activeTime + idleTime;
     float result = 1000.0*(activeTime / totalTime);
