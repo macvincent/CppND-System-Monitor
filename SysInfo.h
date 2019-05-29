@@ -24,8 +24,8 @@ public:
     Getting initial info about system
     Initial data for individual cores is set
     System data is set
-    */
-        this->getOtherCores(getNumberOfCores());
+    */      
+        this->getOtherCores(ProcessParser::getNumberOfCpuCores());
         this->setLastCpuMeasures();
         this->setAttributes();
         this-> OSname = ProcessParser::getOSName();
@@ -54,7 +54,8 @@ void SysInfo::getOtherCores(int _size){
         this->currentCpuCoresStats = std::vector<std::vector<std::string>>();
         this->currentCpuCoresStats.resize(_size);
     for(int i=0;i<_size;i++){
-        this->lastCpuCoresStats[i] = ProcessParser::getSysCpuPercent(to_string(i));
+        string temp = to_string(i);
+        this->lastCpuCoresStats[i] = ProcessParser::getSysCpuPercent(temp);
     }
 }
 void SysInfo::setLastCpuMeasures(){
@@ -87,14 +88,14 @@ void SysInfo::setAttributes(){
 // Constructing string for every core data display
 std::vector<std::string> SysInfo::getCoresStats()const{
     std::vector<std::string> result= std::vector<std::string>();
-    for(int i=0;i<this->coresStats.size();i++){
-        std::string temp =("cpu" + to_string(i) +": ");
-        float check;
-        if(!this->coresStats[i].empty())
-            check = stof(this->coresStats[i]);
+    for(int i=0; i < this->coresStats.size(); i++){
+        std::string temp =("cpu" + to_string(i) +":  ");
+        float check = stof(this->coresStats[i]);
+
         if(!check || this->coresStats[i] == "nan"){
             return std::vector<std::string>();
         }
+
         temp += Util::getProgressBar(this->coresStats[i]);
         result.push_back(temp);
     }
