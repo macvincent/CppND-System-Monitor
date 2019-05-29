@@ -24,7 +24,6 @@ using namespace std;
 class ProcessParser{
 private:
     static std::ifstream stream;
-    static set<string>pidList;
     public:
     static string getCmd(string pid);
     static vector<string> getPidList();
@@ -171,7 +170,6 @@ vector<string> ProcessParser::getPidList(){
     if(closedir(dir)){
         throw runtime_error(strerror(errno));
     }
-    pidList(container.begin(), container.end());
     return container;
 }
 
@@ -349,5 +347,8 @@ int ProcessParser::getNumberOfRunningProcesses(){
 }
 
 bool ProcessParser::isPidExisting(string pid){
-    return pidList.count(pid) != 0;
+    for(auto i : getPidList()){
+        if(i == pid)return true;
+    }
+    return false;
 }
