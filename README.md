@@ -16,5 +16,5 @@ g++ -std="c++17" main.cpp -lncurses && ./a.out
 ```
 4. You should get an output on the terminal showing something like this
 <p align="center">
-  <img src = "https://github.com/macvincent/CppND-System-Monitor/demo.png">
+  <img src = "https://github.com/macvincent/CppND-System-Monitor/blob/master/demo.png">
 </p>
