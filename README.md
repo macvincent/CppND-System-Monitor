@@ -15,5 +15,6 @@ sudo apt-get install libncurses5-dev libncursesw5-dev
 g++ -std="c++17" main.cpp -lncurses && ./a.out
 ```
 4. You should get an output on the terminal showing something like this
-
-
+<p align="center">
+  <img src = "https://github.com/macvincent/CppND-System-Monitor/demo.png">
+</p>
