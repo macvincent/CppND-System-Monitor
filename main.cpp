@@ -7,6 +7,8 @@
 #include <time.h>
 #include <sstream>
 #include <iomanip>
+#include <future>
+#include <thread>
 // #include "util.h"
 #include "SysInfo.h"
 #include "ProcessContainer.h"
@@ -78,8 +80,10 @@ void printMain(SysInfo sys,ProcessContainer procs){
     box (proc_win,0,0);
     procs.refreshList();
     std::vector<std::vector<std::string>> processes = procs.getList();
-    writeSysInfoToConsole(sys,sys_win);
-    getProcessListToConsole(processes[counter],proc_win);
+    future<void> sysFtr = async(writeSysInfoToConsole, sys, sys_win);
+    future<void> procFtr = async(getProcessListToConsole, processes[counter], proc_win);
+    sysFtr.wait();
+    procFtr.wait();
     wrefresh(sys_win);
     wrefresh(proc_win);
     refresh();
