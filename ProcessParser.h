@@ -228,7 +228,7 @@ std::string ProcessParser::PrintCpuStats(std::vector<std::string> values1, std::
     float activeTime = getSysActiveCpuTime(values2) - getSysActiveCpuTime(values1);
     float idleTime = getSysIdleCpuTime(values2) - getSysIdleCpuTime(values1);
     float totalTime = activeTime + idleTime;
-    float result = 1000.0*(activeTime / totalTime);
+    float result = 100.0*(activeTime / totalTime);
     return to_string(result);
 }
 
